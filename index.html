@@ -31,6 +31,19 @@
       font-size: 1.5rem;
       line-height: 1.8;
       text-align: left;
+      list-style: none;
+    }
+
+    .quote-line {
+      cursor: pointer;
+    }
+
+    .quote-line::before {
+      content: '"';
+    }
+
+    .quote-line::after {
+      content: '"';
     }
 
     .author {
@@ -39,16 +52,53 @@
       font-weight: bold;
       text-align: right;
     }
+
+    @keyframes fade {
+      0%,100% { opacity: 0 }
+      50% { opacity: 1 }
+    }
+
+    .notify {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 10vh;
+      opacity: 1;
+      animation: fade 2s linear;
+      background-color: pink;
+      padding: 1rem;
+      border-radius: 1rem;
+    }
   </style>
 </head>
 <body>
   <div class="quote-container">
-    <div class="quote">
-      "/ditre 3"<br>
-      "/ditre 5"<br>
-      "/ditre 7"<br>
-    </div>
+    <ul class="quote">
+      <li class="quote-line">/ditre 3</li>
+      <li class="quote-line">/ditre 5</li>
+      <li class="quote-line">/ditre 7</li>
+    </ul>
     <div class="author">- Lienbibin</div>
+    <div id="notify"></div>
   </div>
 </body>
+<script>
+  function notify(content) {
+    const wrapper = document.getElementById('notify')
+    wrapper.innerHTML += `<div class="notify">Đã copy "${content}"</div>`
+    setTimeout(() => {
+      wrapper.innerHTML = '';
+    }, 2000)
+  }
+
+  function clickQuote(e) {
+    const content = e.target.innerText;
+    navigator.clipboard.writeText(content);
+    notify(content)
+  }
+  const listQuote = document.querySelectorAll('.quote li');
+  listQuote.forEach((el) => {
+    el.addEventListener('click', clickQuote, false)
+  })
+</script>
 </html>
